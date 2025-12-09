@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সমবায় সমিতি ক্যালকুলেটর</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>সমবায় সমিতির দৈনিক ইনভেস্টমেন্ট ক্যালকুলেটর</h1>
+    <p>শুরুতে সদস্য: ৫৫ জন | শুরুর ক্যাশ: ৫,০০০ টাকা | দৈনিক চাঁদা: ১০০ টাকা</p>
+
+    <div id="control-panel">
+        <label for="days">কত দিনের হিসাব চান?</label>
+        <input type="number" id="days" min="1" value="60">
+        <button onclick="generateSheet()">হিসাব দেখুন</button>
+    </div>
+
+    <div id="results">
+        </div>
+
+    <script>
+function generateSheet() {
+    // ব্যবহারকারীর ইনপুট থেকে দিনের সংখ্যা নিন
+    const totalDays = parseInt(document.getElementById('days').value);
+    if (isNaN(totalDays) || totalDays < 1) {
+        alert("দয়া করে ১ বা তার বেশি একটি সঠিক সংখ্যা ইনপুট করুন।");
+        return;
+    }
+
+    // প্রাথমিক/শুরুর মান সেট করা
+    let currentMembers = 55;
+    let currentCash = 5000;
+    const dailyContribution = 100;
+
+    const resultsDiv = document.getElementById('results');
+    let tableHtml = '';
+
+    // টেবিলের হেডার তৈরি
+    tableHtml += `
+        <table>
+            <thead>
+                <tr>
+                    <th>দিন (D)</th>
+                    <th>শুরুর সদস্য (N)</th>
+                    <th>আজকের সংগ্রহ ($N \times 100$)</th>
+                    <th>পূর্বের ক্যাশ</th>
+                    <th>মোট ক্যাশ (A)</th>
+                    <th>নতুন ইনভেস্টমেন্ট (I)</th>
+                    <th>নতুন সদস্য (k)</th>
+                    <th>দিনের শেষে সদস্য</th>
+                    <th>দিনের শেষে ক্যাশ</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    // দিনের হিসাব লুপ
+    for (let day = 1; day <= totalDays; day++) {
+        // আজকের দিনের প্রাথমিক মান
+        const startMembers = currentMembers;
+        const dailyCollection = startMembers * dailyContribution;
+        const previousCash = currentCash;
+        
+        // মোট ক্যাশ গণনা
+        let totalCash = previousCash + dailyCollection;
+        
+        // ইনভেস্টমেন্টের লজিক
+        let investmentAmount = 0;
+        let newMembers = 0;
+        
+        // 9000 এর গুণের ভিত্তিতে ইনভেস্টমেন্টের পরিমাণ এবং নতুন সদস্য সংখ্যা গণনা
+        if (totalCash >= 9000) {
+            // k = সর্বোচ্চ পূর্ণসংখ্যা যার জন্য শর্ত পূরণ হয় (যেমন, 27000 থাকলে k=3)
+            let k = Math.floor(totalCash / 9000); 
+            investmentAmount = k * 9000;
+            newMembers = k;
+        }
+
+        // নতুন ক্যাশ ব্যালেন্স
+        let endCash = totalCash - investmentAmount;
+        
+        // দিনের শেষে মোট সদস্য সংখ্যা আপডেট
+        let endMembers = startMembers + newMembers;
+
+        // পরের দিনের জন্য মানগুলো আপডেট করা
+        currentMembers = endMembers;
+        currentCash = endCash;
+
+        // টেবিল রো তৈরি
+        let rowClass = newMembers > 0 ? 'highlight' : '';
+        if (day === totalDays) {
+            rowClass += ' last-row';
+        }
+        tableHtml += `
+            <tr class="${rowClass.trim()}">
+                <td data-label="দিন (D)">${day}</td>
+                <td data-label="শুরুর সদস্য (N)">${startMembers}</td>
+                <td data-label="আজকের সংগ্রহ ($N \times 100$)">${dailyCollection.toLocaleString('bn-BD')}</td>
+                <td data-label="পূর্বের ক্যাশ">${previousCash.toLocaleString('bn-BD')}</td>
+                <td data-label="মোট ক্যাশ (A)">${totalCash.toLocaleString('bn-BD')}</td>
+                <td data-label="নতুন ইনভেস্টমেন্ট (I)">${investmentAmount.toLocaleString('bn-BD')}</td>
+                <td data-label="নতুন সদস্য (k)">${newMembers}</td>
+                <td data-label="দিনের শেষে সদস্য">${endMembers}</td>
+                <td data-label="দিনের শেষে ক্যাশ">${endCash.toLocaleString('bn-BD')}</td>
+            </tr>
+        `;
+    }
+
+    tableHtml += '</tbody></table>';
+    resultsDiv.innerHTML = '<h2>দৈনিক হিসাব</h2>' + '<div class="table-container">' + tableHtml + '</div>';
+}
+
+// পেজ লোড হওয়ার সাথে সাথে ডিফল্ট ১০ দিনের হিসাব দেখানোর জন্য
+document.addEventListener('DOMContentLoaded', generateSheet);
+    </script>
+</body>
+</html>

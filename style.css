@@ -1,0 +1,132 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+input, button {
+    padding: 10px;
+    margin-right: 10px;
+    font-size: 16px;
+}
+#results {
+    flex-grow: 1; /* Allow results div to take up remaining space */
+    display: flex; /* Make results a flex container for its children */
+    flex-direction: column;
+}
+.table-container {
+    flex-grow: 1; /* Allow table-container to take up remaining space within results */
+    overflow-y: auto;
+    margin-top: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+th {
+    background-color: #f2f2f2;
+}
+.highlight {
+    background-color: #e0f7fa; /* নতুন সদস্য বা ইনভেস্টমেন্ট হলে হাইলাইট */
+    font-weight: bold;
+}
+.last-row {
+    background-color: yellow;
+}
+
+/* Responsive Design for Mobile Devices */
+@media (max-width: 768px) {
+    body {
+        padding: 10px; /* Reduce padding on smaller screens */
+    }
+
+    h1 {
+        font-size: 1.5em; /* Adjust title font size */
+    }
+    
+    p {
+        font-size: 0.9em; /* Adjust paragraph font size */
+    }
+
+    /* Stack input controls vertically */
+    #control-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 10px; /* Add space between stacked items */
+    }
+
+    #control-panel input,
+    #control-panel button {
+        width: 100%; /* Make them full width */
+        margin-right: 0; /* Remove horizontal margin */
+        box-sizing: border-box; /* Ensure padding is included in width */
+    }
+
+    input, button {
+        font-size: 16px; /* Keep font size readable */
+        padding: 12px;
+    }
+
+    /* Force table to not be like a table anymore */
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+        border-radius: 5px; /* Add rounded corners to the card */
+        padding: 5px;
+    }
+    
+    /* Improved card layout for cells using Flexbox */
+    td {
+        display: flex;
+        justify-content: space-between; /* Pushes label and value apart */
+        align-items: center;
+        border: none;
+        border-bottom: 1px solid #eee;
+        padding: 10px 5px;
+    }
+
+    td:last-child {
+        border-bottom: none; /* Remove border from last cell in a card */
+    }
+
+    td:before {
+        content: attr(data-label); /* Use the data-label content */
+        font-weight: bold;
+        text-align: left;
+        padding-right: 15px; /* Space between label and value */
+    }
+    
+    /* Remove sticky header on mobile */
+    th {
+        position: static;
+    }
+
+    .table-container {
+        overflow-y: visible; /* Let the body handle scrolling */
+    }
+}
