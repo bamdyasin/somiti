@@ -1,235 +1,237 @@
-html, body {
-    height: 100%;
-    margin: 0;
-    background-color: #f4f7f6; /* Light gray background for the page */
-}
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    color: #333;
-}
-.main-container {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-}
-h1 {
-    text-align: center;
-    color: #005a9c;
-}
-#summary-text {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.1em;
-    color: #555;
-}
-#summary-text strong {
-    color: #005a9c;
-}
 
-/* Professional Control Panel Design */
-#control-panel {
-    background-color: #ffffff;
+/* Basic Reset & Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    align-items: center;
-    margin: 0 auto 20px auto;
-    max-width: 1200px;
-}
-#control-panel label {
-    font-weight: bold;
+    background-color: #f4f7f6;
     color: #333;
-    /* Removed justify-self: end; - not needed with br tags, and grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); already makes items flow */
-}
-#control-panel input {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 10px;
-    font-size: 16px;
-    width: 100%;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
     box-sizing: border-box;
 }
-#control-panel button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 12px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
-    grid-column: 1 / -1; /* Make button span all columns */
-    justify-self: center; /* Center the button */
-    width: 30%;
-    min-width: 200px;
-}
-#control-panel button:hover {
-    background-color: #0056b3;
-    transform: translateY(-1px);
-}
-#control-panel button:active {
-    transform: translateY(0);
+
+.main-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    width: 100%;
+    margin: 20px auto;
 }
 
-
-input, button {
-    margin-right: 0; /* Remove old margin */
-}
-
-/* Results Area and Table Styling */
-#results {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    max-width: 1200px; /* Align with control-panel */
-    margin: 20px auto 0 auto; /* Center and provide top margin, consistent with control-panel's vertical spacing */
-}
-#results h2 {
+h1 {
     text-align: center;
-    color: #333;
-    margin-bottom: 15px;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2em;
 }
-.table-container {
-    flex-grow: 1;
-    overflow-y: auto;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+h3 {
+    text-align: center;
+    color: #34495e;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+/* Control Panel Styles */
+#control-panel {
+    background-color: #ecf0f1;
     padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
 }
+
+#control-panel label {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-right: 5px;
+    white-space: nowrap;
+}
+
+#control-panel input[type="number"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100px;
+    max-width: calc(50% - 20px); /* Adjust for gap and padding */
+    box-sizing: border-box;
+}
+
+#control-panel button {
+    background-color: #28a745; /* Green for action */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+#control-panel button:hover {
+    background-color: #218838;
+}
+
+/* Summary Text */
+#summary-text {
+    font-size: 1.1em;
+    color: #555;
+    background-color: #e8f5e9;
+    padding: 15px;
+    border-left: 5px solid #28a745;
+    margin-bottom: 30px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#summary-text strong {
+    color: #0a06f9;
+}
+
+/* Table Styles */
+.table-container {
+    overflow-x: auto; /* Make table scrollable on small screens */
+    width: 100%;
+    margin-top: 20px;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-}
-thead {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
-th, td {
-    border-bottom: 1px solid #e0e0e0; /* Horizontal borders only */
-    padding: 16px 15px;
-    text-align: left;
-    color: #333;
-}
-th {
-    background: linear-gradient(to bottom, #f0f0f0, #e0e0e0); /* Header gradient */
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.85em;
-    color: #495057;
-    border-bottom: 2px solid #bdbdbd; /* Stronger header border */
-    padding: 18px 15px;
-}
-td {
-    font-size: 0.95em;
-    color: #495057;
+    margin-top: 20px;
+    font-size: 0.9em;
+    min-width: 800px; /* Ensure a minimum width for non-responsive layout */
 }
 
-tbody tr:nth-child(even) {
-    background-color: #f8f9fa; /* Zebra-striping */
+table th,
+table td {
+    border: 1px solid #ddd;
+    padding: 12px 8px;
+    text-align: right; /* Default to right for numbers */
 }
-tbody tr:hover {
-    background-color: #e2f4ff; /* Hover effect */
+
+table th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    text-align: center; /* Center headers */
 }
-.highlight {
-    background-color: #d1ecf1 !important;
+
+table td:first-child { /* Day column */
+    text-align: center;
+    font-weight: bold;
+    background-color: #f2f2f2;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #bfff00;
+}
+
+/* Highlight for new members */
+table tr.highlight {
+    background-color: #c8e6c9; /* Light green */
     font-weight: bold;
 }
-.last-row {
-    background-color: #FFEB3B !important; /* Distinct yellow for last row */
+
+table tr.highlight:hover {
+    background-color: #aed5ae;
 }
 
-/* Responsive Design */
-@media (max-width: 900px) {
-    #control-panel {
-        grid-template-columns: 1fr 2fr;
-    }
-    #control-panel label {
-        justify-self: start;
-    }
-    #control-panel button {
-        width: 50%;
-    }
-    #results {
-        max-width: calc(100% - 40px); /* Adjust for padding on smaller screens */
-    }
+/* Last row for total */
+table tr.last-row {
+    background-color: #fff200; /* Light blue */
+    font-weight: bold;
+    border-top: 2px solid #fff700;
 }
 
+/* Responsive adjustments for control panel */
 @media (max-width: 768px) {
-    .main-container {
-        padding: 10px;
-    }
-    h1 {
-        font-size: 1.5em;
-    }
-    #summary-text {
-        font-size: 1em;
-    }
     #control-panel {
-        display: flex;
         flex-direction: column;
-        gap: 15px;
-    }
-    #control-panel input,
-    #control-panel button {
-        width: 100%;
-        box-sizing: border-box;
-    }
-    #control-panel label {
-        text-align: left;
-    }
-    input, button {
-        font-size: 16px;
-        padding: 12px;
+        align-items: stretch;
     }
 
-    /* Table to card layout */
-    table, thead, tbody, th, td, tr {
+    #control-panel input[type="number"] {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #control-panel label {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 5px;
+    }
+}
+
+/* Responsive table with data-label */
+@media screen and (max-width: 600px) {
+    table {
+        border: 0;
+        min-width: unset; /* Remove min-width for mobile */
+    }
+
+    table thead {
+        display: none;
+    }
+
+    table tr {
+        margin-bottom: 10px;
         display: block;
+        border: 1px solid #ddd;
+        border-radius: 5px;
     }
-    thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
+
+    table td {
+        display: block;
+        text-align: right !important;
+        border-bottom: 1px dotted #ccc;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
     }
-    tr {
-        border: 1px solid #ccc;
-        margin-bottom: 15px;
-        border-radius: 8px; /* Match container radius */
-        padding: 10px;
-        background-color: #fff;
-    }
-    td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: none;
-        border-bottom: 1px solid #eee;
-        padding: 10px 5px;
-    }
-    td:last-child {
-        border-bottom: none;
-    }
-    td:before {
+
+    table td::before {
         content: attr(data-label);
+        position: absolute;
+        left: 0px;
+        width: 50%;
+        padding-left: 15px;
         font-weight: bold;
         text-align: left;
-        padding-right: 15px;
     }
-    .table-container {
-        overflow-y: visible;
-        box-shadow: none;
-        background-color: transparent;
+
+    table td:last-child {
+        border-bottom: 0;
     }
-    tbody tr:nth-child(even) { /* Remove zebra-striping for card view */
-        background-color: #fff;
+
+    table tr.highlight {
+        background-color: #c8e6c9;
     }
-    #results { /* Remove max-width for mobile for full width */
-        max-width: 100%;
-        margin: 10px auto 0 auto;
+
+    table tr.highlight td::before {
+        color: #1a6d2b;
+    }
+
+    table tr.last-row {
+        background-color: #fffb00;
+    }
+
+    table tr.last-row td::before {
+        color: #0d47a1;
     }
 }

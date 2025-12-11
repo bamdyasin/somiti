@@ -9,21 +9,21 @@
 <body>
     <div class="main-container">
 
-    <h1>সমবায় সমিতির দৈনিক ইনভেস্টমেন্ট ক্যালকুলেটর</h1>
+    <h1>✦ সমবায় সমিতির দৈনিক ইনভেস্টমেন্ট ক্যালকুলেটর</h1>
 
     <div id="control-panel">
-        <label for="initialMembers">শুরুর সদস্য?</label>
+        <label for="initialMembers">শুরুর সদস্য:</label>
         <input type="number" id="initialMembers" min="1" value="55">
-        <label for="memberFee">সদস্য ফি?</label>
+        <label for="memberFee">মাথাপিছু ঋণ:</label>
         <input type="number" id="memberFee" min="1" value="9000">
-        <br><label for="dailyContributionInput">দৈনিক চাঁদা?</label>
-        <input type="number" id="dailyContributionInput" min="1" value="100">
-        <label for="days">কত দিনের হিসাব চান?</label>
+        <label for="dailyContributionInput">প্রতি কিস্তি:</label>
+        <input type="number" id="dailyContributionInput" min="1" value="100"> <br/>
+        <label for="days">কত দিনের হিসাব?</label>
         <input type="number" id="days" min="1" value="10">
         <button onclick="generateSheet()">হিসাব দেখুন</button>
     </div>
 
-    <h3> <p id="summary-text">শুরুতে সদস্য: ৫৫ জন | শুরুর ক্যাশ: ৫,০০০ টাকা | দৈনিক চাঁদা: ১০০ টাকা</p></h3>
+    <h2> <p id="summary-text">শুরুতে সদস্য: ৫৫ জন | মাথাপিছু ঋণ: ৯,০০০ টাকা | প্রতি কিস্তি: ১০০ টাকা</p></h2>
 
 
     <div id="results">
@@ -64,7 +64,7 @@ function generateSheet() {
     let currentCash = 0;
 
     // সারাংশ টেক্সট আপডেট করুন
-    document.getElementById('summary-text').innerHTML = `শুরুতে সদস্য: <strong>${initialMembers.toLocaleString('bn-BD')}</strong> জন | সদস্য ফি: <strong>${memberFee.toLocaleString('bn-BD')}</strong> টাকা | দৈনিক চাঁদা: <strong>${dailyContribution.toLocaleString('bn-BD')}</strong> টাকা`;
+    document.getElementById('summary-text').innerHTML = `শুরুতে সদস্য: <strong>${initialMembers.toLocaleString('bn-BD')}</strong> জন | মাথাপিছু ঋণ: <strong>${memberFee.toLocaleString('bn-BD')}</strong> টাকা | প্রতি কিস্তি: <strong>${dailyContribution.toLocaleString('bn-BD')}</strong> টাকা`;
     
     const resultsDiv = document.getElementById('results');
     let tableHtml = '';
