@@ -7,15 +7,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="main-container">
 
     <h1>সমবায় সমিতির দৈনিক ইনভেস্টমেন্ট ক্যালকুলেটর</h1>
-    <p>শুরুতে সদস্য: ৫৫ জন | শুরুর ক্যাশ: ৫,০০০ টাকা | দৈনিক চাঁদা: ১০০ টাকা</p>
 
     <div id="control-panel">
+        <label for="initialMembers">শুরুর সদস্য?</label>
+        <input type="number" id="initialMembers" min="1" value="55">
+        <label for="memberFee">সদস্য ফি?</label>
+        <input type="number" id="memberFee" min="1" value="9000">
+        <br><label for="dailyContributionInput">দৈনিক চাঁদা?</label>
+        <input type="number" id="dailyContributionInput" min="1" value="100">
         <label for="days">কত দিনের হিসাব চান?</label>
-        <input type="number" id="days" min="1" value="60">
+        <input type="number" id="days" min="1" value="10">
         <button onclick="generateSheet()">হিসাব দেখুন</button>
     </div>
+
+    <h3> <p id="summary-text">শুরুতে সদস্য: ৫৫ জন | শুরুর ক্যাশ: ৫,০০০ টাকা | দৈনিক চাঁদা: ১০০ টাকা</p></h3>
+
 
     <div id="results">
         </div>
@@ -29,11 +38,34 @@ function generateSheet() {
         return;
     }
 
-    // প্রাথমিক/শুরুর মান সেট করা
-    let currentMembers = 55;
-    let currentCash = 5000;
-    const dailyContribution = 100;
+    // ব্যবহারকারীর ইনপুট থেকে শুরুর সদস্য সংখ্যা নিন
+    const initialMembers = parseInt(document.getElementById('initialMembers').value);
+    if (isNaN(initialMembers) || initialMembers < 1) {
+        alert("দয়া করে সদস্য সংখ্যা ১ বা তার বেশি একটি সঠিক সংখ্যা ইনপুট করুন।");
+        return;
+    }
 
+    // ব্যবহারকারীর ইনপুট থেকে সদস্য ফি নিন
+    const memberFee = parseInt(document.getElementById('memberFee').value);
+    if (isNaN(memberFee) || memberFee < 1) {
+        alert("দয়া করে সদস্য ফি ১ বা তার বেশি একটি সঠিক সংখ্যা ইনপুট করুন।");
+        return;
+    }
+
+    // ব্যবহারকারীর ইনপুট থেকে দৈনিক চাঁদা নিন
+    const dailyContribution = parseInt(document.getElementById('dailyContributionInput').value);
+    if (isNaN(dailyContribution) || dailyContribution < 1) {
+        alert("দয়া করে দৈনিক চাঁদা ১ বা তার বেশি একটি সঠিক সংখ্যা ইনপুট করুন।");
+        return;
+    }
+
+    // প্রাথমিক/শুরুর মান সেট করা
+    let currentMembers = initialMembers;
+    let currentCash = 0;
+
+    // সারাংশ টেক্সট আপডেট করুন
+    document.getElementById('summary-text').innerHTML = `শুরুতে সদস্য: <strong>${initialMembers.toLocaleString('bn-BD')}</strong> জন | সদস্য ফি: <strong>${memberFee.toLocaleString('bn-BD')}</strong> টাকা | দৈনিক চাঁদা: <strong>${dailyContribution.toLocaleString('bn-BD')}</strong> টাকা`;
+    
     const resultsDiv = document.getElementById('results');
     let tableHtml = '';
 
@@ -42,15 +74,16 @@ function generateSheet() {
         <table>
             <thead>
                 <tr>
-                    <th>দিন (D)</th>
-                    <th>শুরুর সদস্য (N)</th>
-                    <th>আজকের সংগ্রহ ($N \times 100$)</th>
-                    <th>পূর্বের ক্যাশ</th>
-                    <th>মোট ক্যাশ (A)</th>
-                    <th>নতুন ইনভেস্টমেন্ট (I)</th>
-                    <th>নতুন সদস্য (k)</th>
+                    <th>দিন </th>
+                    <th>শুরুর সদস্য </th>
+                    <th>দৈনিক সংগ্রহ </th>
+                    <th>পূর্বের ক্যাশ </th>
+                    <th>মোট ক্যাশ </th>
+                    <th>নতুন ইনভেস্ট </th>
+                    <th>নতুন সদস্য ++</th>
                     <th>দিনের শেষে সদস্য</th>
                     <th>দিনের শেষে ক্যাশ</th>
+                    <th>মোট সম্পদ</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,11 +103,11 @@ function generateSheet() {
         let investmentAmount = 0;
         let newMembers = 0;
         
-        // 9000 এর গুণের ভিত্তিতে ইনভেস্টমেন্টের পরিমাণ এবং নতুন সদস্য সংখ্যা গণনা
-        if (totalCash >= 9000) {
-            // k = সর্বোচ্চ পূর্ণসংখ্যা যার জন্য শর্ত পূরণ হয় (যেমন, 27000 থাকলে k=3)
-            let k = Math.floor(totalCash / 9000); 
-            investmentAmount = k * 9000;
+        // সদস্য ফি-এর গুণের ভিত্তিতে ইনভেস্টমেন্টের পরিমাণ এবং নতুন সদস্য সংখ্যা গণনা
+        if (totalCash >= memberFee) {
+            // k = সর্বোচ্চ পূর্ণসংখ্যা যার জন্য শর্ত পূরণ হয়
+            let k = Math.floor(totalCash / memberFee); 
+            investmentAmount = k * memberFee;
             newMembers = k;
         }
 
@@ -83,6 +116,9 @@ function generateSheet() {
         
         // দিনের শেষে মোট সদস্য সংখ্যা আপডেট
         let endMembers = startMembers + newMembers;
+
+        // মোট সম্পদ গণনা
+        const companyValue = endMembers * memberFee;
 
         // পরের দিনের জন্য মানগুলো আপডেট করা
         currentMembers = endMembers;
@@ -97,23 +133,25 @@ function generateSheet() {
             <tr class="${rowClass.trim()}">
                 <td data-label="দিন (D)">${day}</td>
                 <td data-label="শুরুর সদস্য (N)">${startMembers}</td>
-                <td data-label="আজকের সংগ্রহ ($N \times 100$)">${dailyCollection.toLocaleString('bn-BD')}</td>
+                <td data-label="আজকের সংগ্রহ">${dailyCollection.toLocaleString('bn-BD')}</td>
                 <td data-label="পূর্বের ক্যাশ">${previousCash.toLocaleString('bn-BD')}</td>
                 <td data-label="মোট ক্যাশ (A)">${totalCash.toLocaleString('bn-BD')}</td>
                 <td data-label="নতুন ইনভেস্টমেন্ট (I)">${investmentAmount.toLocaleString('bn-BD')}</td>
                 <td data-label="নতুন সদস্য (k)">${newMembers}</td>
                 <td data-label="দিনের শেষে সদস্য">${endMembers}</td>
                 <td data-label="দিনের শেষে ক্যাশ">${endCash.toLocaleString('bn-BD')}</td>
+                <td data-label="মোট সম্পদ">${companyValue.toLocaleString('bn-BD')}</td>
             </tr>
         `;
     }
 
     tableHtml += '</tbody></table>';
-    resultsDiv.innerHTML = '<h2>দৈনিক হিসাব</h2>' + '<div class="table-container">' + tableHtml + '</div>';
+    resultsDiv.innerHTML ='<div class="table-container">' + tableHtml + '</div>';
 }
 
 // পেজ লোড হওয়ার সাথে সাথে ডিফল্ট ১০ দিনের হিসাব দেখানোর জন্য
 document.addEventListener('DOMContentLoaded', generateSheet);
     </script>
+    </div>
 </body>
 </html>
