@@ -13,17 +13,17 @@
 
     <div id="control-panel">
         <label for="initialMembers">শুরুর সদস্য:</label>
-        <input type="number" id="initialMembers" min="1" value="55">
+        <input type="number" id="initialMembers" min="1" value="5">
         <label for="memberFee">মাথাপিছু ঋণ:</label>
-        <input type="number" id="memberFee" min="1" value="9000">
+        <input type="number" id="memberFee" min="1" value="10000">
         <label for="dailyContributionInput">প্রতি কিস্তি:</label>
-        <input type="number" id="dailyContributionInput" min="1" value="100"> <br/>
+        <input type="number" id="dailyContributionInput" min="1" value="1000"> <br/>
         <label for="days">কত দিনের হিসাব?</label>
-        <input type="number" id="days" min="1" value="10">
+        <input type="number" id="days" min="1" value="15">
         <button onclick="generateSheet()">হিসাব দেখুন</button>
     </div>
 
-    <h2> <p id="summary-text">শুরুতে সদস্য: ৫৫ জন | মাথাপিছু ঋণ: ৯,০০০ টাকা | প্রতি কিস্তি: ১০০ টাকা</p></h2>
+    <h2> <p id="summary-text">শুরুতে সদস্য: ৫ জন | মাথাপিছু ঋণ: ১০,০০০ টাকা | প্রতি কিস্তি: ১,০০০ টাকা</p></h2>
 
 
     <div id="results">
@@ -31,46 +31,38 @@
 
     <script>
 function generateSheet() {
-    // ব্যবহারকারীর ইনপুট থেকে দিনের সংখ্যা নিন
     const totalDays = parseInt(document.getElementById('days').value);
     if (isNaN(totalDays) || totalDays < 1) {
         alert("দয়া করে ১ বা তার বেশি একটি সঠিক সংখ্যা ইনপুট করুন।");
         return;
     }
 
-    // ব্যবহারকারীর ইনপুট থেকে শুরুর সদস্য সংখ্যা নিন
     const initialMembers = parseInt(document.getElementById('initialMembers').value);
     if (isNaN(initialMembers) || initialMembers < 1) {
         alert("দয়া করে সদস্য সংখ্যা ১ বা তার বেশি একটি সঠিক সংখ্যা ইনপুট করুন।");
         return;
     }
 
-    // ব্যবহারকারীর ইনপুট থেকে সদস্য ফি নিন
     const memberFee = parseInt(document.getElementById('memberFee').value);
     if (isNaN(memberFee) || memberFee < 1) {
         alert("দয়া করে সদস্য ফি ১ বা তার বেশি একটি সঠিক সংখ্যা ইনপুট করুন।");
         return;
     }
 
-    // ব্যবহারকারীর ইনপুট থেকে দৈনিক চাঁদা নিন
     const dailyContribution = parseInt(document.getElementById('dailyContributionInput').value);
     if (isNaN(dailyContribution) || dailyContribution < 1) {
         alert("দয়া করে দৈনিক চাঁদা ১ বা তার বেশি একটি সঠিক সংখ্যা ইনপুট করুন।");
         return;
     }
 
-    // প্রাথমিক/শুরুর মান সেট করা
-    let currentMembers = initialMembers;
+    // সদস্যেদের ঋণের হিসাব রাখার জন্য অ্যারে তৈরি
+    let members = Array(initialMembers).fill(memberFee);
     let currentCash = 0;
 
-    // সারাংশ টেক্সট আপডেট করুন
     document.getElementById('summary-text').innerHTML = `শুরুতে সদস্য: <strong>${initialMembers.toLocaleString('bn-BD')}</strong> জন | মাথাপিছু ঋণ: <strong>${memberFee.toLocaleString('bn-BD')}</strong> টাকা | প্রতি কিস্তি: <strong>${dailyContribution.toLocaleString('bn-BD')}</strong> টাকা`;
     
     const resultsDiv = document.getElementById('results');
-    let tableHtml = '';
-
-    // টেবিলের হেডার তৈরি
-    tableHtml += `
+    let tableHtml = `
         <table>
             <thead>
                 <tr>
@@ -89,42 +81,33 @@ function generateSheet() {
             <tbody>
     `;
 
-    // দিনের হিসাব লুপ
     for (let day = 1; day <= totalDays; day++) {
-        // আজকের দিনের প্রাথমিক মান
-        const startMembers = currentMembers;
+        const startMembers = members.length;
         const dailyCollection = startMembers * dailyContribution;
         const previousCash = currentCash;
-        
-        // মোট ক্যাশ গণনা
         let totalCash = previousCash + dailyCollection;
         
-        // ইনভেস্টমেন্টের লজিক
+        // সদস্যদের ঋণ পরিশোধ
+        members = members.map(loan => loan - dailyContribution).filter(loan => loan > 0);
+
         let investmentAmount = 0;
         let newMembers = 0;
         
-        // সদস্য ফি-এর গুণের ভিত্তিতে ইনভেস্টমেন্টের পরিমাণ এবং নতুন সদস্য সংখ্যা গণনা
         if (totalCash >= memberFee) {
-            // k = সর্বোচ্চ পূর্ণসংখ্যা যার জন্য শর্ত পূরণ হয়
             let k = Math.floor(totalCash / memberFee); 
             investmentAmount = k * memberFee;
             newMembers = k;
+            for(let i=0; i<k; i++) {
+                members.push(memberFee);
+            }
         }
 
-        // নতুন ক্যাশ ব্যালেন্স
         let endCash = totalCash - investmentAmount;
-        
-        // দিনের শেষে মোট সদস্য সংখ্যা আপডেট
-        let endMembers = startMembers + newMembers;
+        let endMembers = members.length;
+        const companyValue = endMembers * memberFee + endCash;
 
-        // মোট সম্পদ গণনা
-        const companyValue = endMembers * memberFee;
-
-        // পরের দিনের জন্য মানগুলো আপডেট করা
-        currentMembers = endMembers;
         currentCash = endCash;
 
-        // টেবিল রো তৈরি
         let rowClass = newMembers > 0 ? 'highlight' : '';
         if (day === totalDays) {
             rowClass += ' last-row';
@@ -149,7 +132,6 @@ function generateSheet() {
     resultsDiv.innerHTML ='<div class="table-container">' + tableHtml + '</div>';
 }
 
-// পেজ লোড হওয়ার সাথে সাথে ডিফল্ট ১০ দিনের হিসাব দেখানোর জন্য
 document.addEventListener('DOMContentLoaded', generateSheet);
     </script>
     </div>
